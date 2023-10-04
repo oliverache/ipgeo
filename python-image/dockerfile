@@ -1,0 +1,16 @@
+#Base image official Python image with Python 3.8 installed
+FROM python:3.8-slim
+#creating new user inside the Docker container during the image build process, standard user (app_user)
+RUN useradd --create-home --shell /bin/bash app_user
+#setting the working directory inside the Docker container for app_user
+WORKDIR /home/app_user
+#copy requirements file from host machine, source file 'requirements.txt' in the current directory './', to install the packages listed in 'requirements.txt'
+COPY requirements.txt ./
+#installing packages listed in requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
+#switch user
+USER app_user
+#copy all files and directories from the current directory on the host machine to the current working directory inside the Docker container.
+COPY . .
+#launch bash when the container is started
+CMD ["bash"]
